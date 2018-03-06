@@ -1,6 +1,8 @@
 # hex-mesh
 
-A Quil sketch designed to ... well, that part is up to you.
+A Quil sketch of sunlight on water, made geometric.
+Or maybe I see to many patterns in the noise.
+
 
 ## Usage
 
@@ -12,7 +14,6 @@ REPL - run `(require 'hex-mesh.core)`.
 
 ## License
 
-Copyright © 2016 FIXME
+Copyright © 2018
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the Eclipse Public License 1.0
