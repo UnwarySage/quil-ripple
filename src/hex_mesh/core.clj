@@ -4,6 +4,8 @@
 
 (def descent-step 8)
 (def shift-step 16)
+(def tree-height 60)
+(def max-lines 39000)
 
 (defn setup []
   ; Set frame rate to 30 frames per second.
@@ -13,7 +15,7 @@
   (q/random-seed 48)
   ;world-state is a list of active points, and a list of generated points
   ;each point is a map with :x and :y fields for the tip, and rootx and rooty filed for the base.
-  {:active [{:x 250 :y 5 :rootx 250 :rooty 0}]
+  {:active {:x 250 :y 5 :rootx 250 :rooty 0}
    :old [{:x 250 :y 5 :rootx 250 :rooty 0}]})
 
 
@@ -22,26 +24,36 @@
   [inp-point]
   {:rootx (inp-point :x)
    :rooty (inp-point :y)
-   :x (if (= 0 (rand-int 2  ))
+   :x (if (= 0 (rand-int 2))
           (+ (inp-point :x ) shift-step )
           (- (inp-point :x ) shift-step ))
    :y (+ descent-step (inp-point :y))})
 
-(defn update-state [state]
+(defn old-update-state [state]
   ; Update sketch state by changing circle color and position.
   (let [active (state :active) old (state :old)
         present (first active)]
     {:active (cons (last old) (rest active))
-     :old (cons (descend-point present) (shuffle old))}))
+     :old (vec (cons (descend-point present) (shuffle old)))}))
 
+(defn update-state
+  [{:keys [active old ] :as state}]
+  (let [new-point (descend-point active)]
+    {:active (if (< (new-point :y) (* tree-height descent-step))
+                 new-point
+                 (first (shuffle old)))
+    :old (if (< (count old) max-lines)
+              ;;if we aren't at max lines, add the point
+              (vec (cons new-point old))
+              ;;if we are, remove a random line and add it
+              (vec (cons new-point (rest (shuffle old)))))}))
 
 (defn draw-state [state]
   ; Clear the sketch by filling it with light-grey color.
   (q/background 255 255 255)
   ; Set circle color.
-  (q/stroke 0 0 0)
+  (q/stroke 0 0 0 50)
   (q/stroke-weight 2)
-  (println (last (state :active)))
   (doall (map #(q/line (% :rootx ) (% :rooty ) (% :x) (% :y )) (state :old))))
 
 
