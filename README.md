@@ -1,7 +1,7 @@
 # hex-mesh
 
 A Quil sketch of sunlight on water, made geometric.
-Or maybe I see to many patterns in the noise.
+Or maybe I see too many patterns in the noise.
 
 
 ## Usage
